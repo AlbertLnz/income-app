@@ -1,18 +1,19 @@
-
-import { LineEdit, Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox , LineEdit, StandardListView, GroupBox} from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     background: #313e50;
+    animate background { duration: 800ms; }
 
-    in property <string> results: ""; // input public property (in)
+    in property <string> results: "";
     callback divide-income(string);
+    in-out property <bool> openCurtain;
+
 
     GridLayout {
         padding: 50px;
         spacing: 25px;
-
         Row {
-            Text {
+            text := Text {
                 text: "Enter Total Income";
                 horizontal-alignment: center;
                 font-size: 24px;
@@ -20,19 +21,23 @@ export component AppWindow inherits Window {
             }
         }
         Row {
-            income := LineEdit {
+            input := LineEdit {
+                placeholder-text: "Enter your number";
                 font-size: 16px;
-                placeholder-text: "Enter a number";
-                horizontal-alignment: center;
                 height: 35px;
+                horizontal-alignment: center;
             }
         }
         Row {
-            Button {
+            button := Button {
                 text: "Calculate";
-                primary: true; // primary color
+                padding-top: 30px;
                 height: 35px;
-                clicked => { divide-income(income.text) }
+                primary: true;
+                clicked => {
+                    root.divide-income(input.text);
+                    root.openCurtain = !root.openCurtain;
+                }
             }
         }
         Row {
@@ -41,10 +46,36 @@ export component AppWindow inherits Window {
                     height: 100px;
                     background: #f2f2f2;
                     Text {
-                        color: black;
-                        font-size: 16px;
-                        font-weight: 500;
                         text: root.results;
+                        font-size: 16px;
+                        color: #000000;
+                        font-weight: 500;
+                    }
+                    // Left curtain
+                    Rectangle {
+                        background: #333333;
+                        x: 0px;
+                        width: openCurtain ? 0px : (parent.width / 2);
+                        height: parent.height;
+                        animate width { 
+                            duration: 250ms; 
+                            easing: ease-in; 
+                        }
+                    }
+
+                    // Right curtain
+                    Rectangle {
+                        background: #333333;
+                        x: openCurtain ? parent.width : (parent.width / 2);
+                        width: openCurtain ? 0px : (parent.width / 2);
+                        height: parent.height;
+                        animate width { 
+                            duration: 250ms; 
+                            easing: ease-in; 
+                        }
+                        animate x { duration: 250ms; 
+                            easing: ease-in; 
+                        }
                     }
                 }
             }
