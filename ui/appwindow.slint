@@ -1,5 +1,14 @@
 
 import { LineEdit, Button } from "std-widgets.slint";
+
+component CalculateButton {
+    Button {
+        text: "Calculate";
+        primary: true; // primary color
+        height: 35px;
+    }
+}
+
 export component AppWindow inherits Window {
     background: #313e50;
 
@@ -24,11 +33,7 @@ export component AppWindow inherits Window {
             }
         }
         Row {
-            Button {
-                text: "Calculate";
-                primary: true; // primary color
-                height: 35px;
-            }
+            CalculateButton {}
         }
     }
 }
